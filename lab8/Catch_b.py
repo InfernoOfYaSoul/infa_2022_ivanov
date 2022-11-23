@@ -3,7 +3,7 @@ from pygame.draw import *
 from random import randint
 pygame.init()
 
-FPS = 60
+FPS = 120
 screen = pygame.display.set_mode((1200, 900))
 
 
@@ -18,7 +18,7 @@ BLACK = (0, 0, 0)
 COLORS = [RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN]
 
 screen.fill(WHITE)
-n = 100
+n = 20
 
 color = [0]*n
 x = [0]*n
@@ -26,7 +26,7 @@ y = [0]*n
 vx = [0]*n
 vy = [0]*n
 r = [0]*n
-vr = [5]*n
+vr = [randint(1, 10)]*n
 
 def sgn(x):
     if x == 0:
@@ -48,7 +48,6 @@ def ball_roll(t, j):
             vy0 = 400*sgn(vy0)
     x0 = x[j] + t * vx0
     y0 = y[j] + t * vy0
-    print(j, vx0, vy0)
     return x0, y0, vx0, vy0
 
 
@@ -82,6 +81,7 @@ while not finished:
     dt = clock.tick(FPS)/1000.0
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            print(cnt)
             finished = True
         elif event.type == pygame.MOUSEBUTTONDOWN:
             cnt = click(cnt)
@@ -90,9 +90,10 @@ while not finished:
     for i in range(n):
         x[i], y[i], vx[i], vy[i] = ball_roll(dt, i)
         color[i] = ((color[i][0] + 10) % 255, (color[i][1] + 10) % 255, (color[i][2] + 10) % 255)
-        if(r[i] > 100) or (r[i] < 0):
+        if(r[i] > 100) or (r[i] < 7):
             vr[i] = -vr[i]
-        r[i] = r[i] + vr[i]
+        if i % 2 == 0:
+            r[i] = r[i] + vr[i]
         circle(screen, color[i], (x[i], y[i]), r[i])
     pygame.display.flip()
 
